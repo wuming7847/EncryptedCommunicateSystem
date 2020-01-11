@@ -1,8 +1,8 @@
 # coding:gbk
 '''
-Author:       ÎŞÃûJoker
-Purpose:    ¿Í»§¶Ë
-Date:          2019Äê12ÔÂ31ÈÕ
+Author:       æ— åJoker
+Purpose:    å®¢æˆ·ç«¯
+Date:          2019å¹´12æœˆ31æ—¥
 Arguments:
 Outputs:
 Dependencies:
@@ -21,19 +21,19 @@ import threading
 
 
 from Cryptography import UniversalMethods as UM
-# Ìá¸ß´úÂë¸´ÓÃ¶ÈµÄÖĞ²ãÄ£¿é£¬ÄÚ²¿·â×°ÁË´ó¶àÊı·½·¨
+# æé«˜ä»£ç å¤ç”¨åº¦çš„ä¸­å±‚æ¨¡å—ï¼Œå†…éƒ¨å°è£…äº†å¤§å¤šæ•°æ–¹æ³•
 
 from Cryptography import DiffieHellman as DH
-# DHËã·¨Éú³É¹«Ë½Ô¿¶Ô¼°Ğ­ÉÌ¹²ÏíÃÜÔ¿
+# DHç®—æ³•ç”Ÿæˆå…¬ç§é’¥å¯¹åŠåå•†å…±äº«å¯†é’¥
 
 
 def connectToServer(host, port):
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # ´´½¨socket¶ÔÏóÓÃÓÚÁ¬½Ó·şÎñ¶Ë
+    # åˆ›å»ºsocketå¯¹è±¡ç”¨äºè¿æ¥æœåŠ¡ç«¯
 
-    print("ÕıÔÚ³¢ÊÔÓë·şÎñÆ÷", host, ":", port, "½¨Á¢Á¬½Ó...")
+    print("æ­£åœ¨å°è¯•ä¸æœåŠ¡å™¨", host, ":", port, "å»ºç«‹è¿æ¥...")
     serverSocket.connect((host, port))
-    print("Á¬½Ó³É¹¦")
+    print("è¿æ¥æˆåŠŸ")
     print()
 
     return serverSocket
@@ -43,49 +43,49 @@ if __name__ == "__main__":
     host = '127.0.0.1'
     port = 9999
     serverSocket = connectToServer(host, port)
-    # Á¬½Óµ½·şÎñÆ÷Ì×½Ó×Ö
+    # è¿æ¥åˆ°æœåŠ¡å™¨å¥—æ¥å­—
 
     global privatePemPath
-    # ×Ô¼ºµÄRSAË½Ô¿ÎÄ¼ş
+    # è‡ªå·±çš„RSAç§é’¥æ–‡ä»¶
     global publicPemPath
-    # ¶Ô·½µÄRSA¹«Ô¿ÎÄ¼ş
+    # å¯¹æ–¹çš„RSAå…¬é’¥æ–‡ä»¶
     privatePemPath = 'RSA_PrivateAlice.pem'
     publicPemPath = 'RSA_PublicBob.pem'
 
     UM.sendLegalInfoTo(serverSocket, privatePemPath, publicPemPath)
-    # Ïò·şÎñÆ÷·¢ËÍ×Ô¼ºµÄºÏ·¨ĞÔĞ£ÑéĞÅÏ¢
+    # å‘æœåŠ¡å™¨å‘é€è‡ªå·±çš„åˆæ³•æ€§æ ¡éªŒä¿¡æ¯
     legalServer = UM.readLegalInfoFrom(serverSocket, publicPemPath)
-    # Ğ£Ñé·şÎñÆ÷µÄºÏ·¨ĞÔ
+    # æ ¡éªŒæœåŠ¡å™¨çš„åˆæ³•æ€§
 
     if(legalServer):
-        # Ğ£Ñé¶Ô·½Éí·İºÏ·¨Ê±¿ªÊ¼Ğ­ÉÌDHÃÜÔ¿ÒÔ¼°ºóĞøÍ¨ĞÅ
+        # æ ¡éªŒå¯¹æ–¹èº«ä»½åˆæ³•æ—¶å¼€å§‹åå•†DHå¯†é’¥ä»¥åŠåç»­é€šä¿¡
 
         DH_Group = 15
-        # Éú³ÉDHËã·¨¹«Ë½Ô¿¶ÔµÄ²ÎÊı
+        # ç”ŸæˆDHç®—æ³•å…¬ç§é’¥å¯¹çš„å‚æ•°
         DH_AliceClient, DH_PrivateAlice, DH_PublicAlice = DH.DH_Original(DH_Group)
-        # Éú³ÉDHE¶ÔÏó¼°DH¹«Ë½Ô¿
+        # ç”ŸæˆDHEå¯¹è±¡åŠDHå…¬ç§é’¥
 
         UM.RSA_EncryptSignatureTo(serverSocket, str(DH_Group), privatePemPath, publicPemPath)
-        # 1.·¢ËÍDH_Group¸ø·şÎñÆ÷
+        # 1.å‘é€DH_Groupç»™æœåŠ¡å™¨
 
-        UM.sendTo(serverSocket, DH_PublicAlice, "ÒÑÏò·şÎñÆ÷·¢ËÍ¿Í»§¶ËDH¹«Ô¿")
-        # 2.·¢ËÍ¿Í»§¶ËDH¹«Ô¿¸ø·şÎñÆ÷
+        UM.sendTo(serverSocket, DH_PublicAlice, "å·²å‘æœåŠ¡å™¨å‘é€å®¢æˆ·ç«¯DHå…¬é’¥")
+        # 2.å‘é€å®¢æˆ·ç«¯DHå…¬é’¥ç»™æœåŠ¡å™¨
 
         # legalDH_PublicBob, RSA_DH_PublicBob = UM.RSA_VerifyFrom(serverSocket, publicPemPath)
-        DH_PublicBob = UM.readFrom(serverSocket, 'ÒÑ½ÓÊÕµ½·şÎñÆ÷DH¹«Ô¿')
-        # 3.½ÓÊÕ·şÎñÆ÷DH¹«Ô¿
-        print('·şÎñÆ÷DH¹«Ô¿', DH_PublicBob)
+        DH_PublicBob = UM.readFrom(serverSocket, 'å·²æ¥æ”¶åˆ°æœåŠ¡å™¨DHå…¬é’¥')
+        # 3.æ¥æ”¶æœåŠ¡å™¨DHå…¬é’¥
+        print('æœåŠ¡å™¨DHå…¬é’¥', str(DH_PublicBob)[0:20])
 
         DH_FinalKey = DH.DH_FinalKeyGenerator(DH_AliceClient, int(DH_PublicBob))
-        # Éú³É¹²ÏíDHÃÜÔ¿
+        # ç”Ÿæˆå…±äº«DHå¯†é’¥
 
-        print('¿ªÊ¼Í¨ĞÅ...')
+        print('å¼€å§‹é€šä¿¡...')
         print()
 
         TDES_Key = str(DH_FinalKey)[0:24]
-        # Ê¹ÓÃĞ­ÉÌ³öµÄ¹²ÏíDHÃÜÔ¿µÄÇ°24Î»×÷TDESÃÜÔ¿
+        # ä½¿ç”¨åå•†å‡ºçš„å…±äº«DHå¯†é’¥çš„å‰24ä½ä½œTDESå¯†é’¥
 
-        # ¶àÏß³ÌÊµÏÖ±ß¼àÌı±ß·¢ËÍ
+        # å¤šçº¿ç¨‹å®ç°è¾¹ç›‘å¬è¾¹å‘é€
         clientSending = threading.Thread(target=UM.sendingThread, args=(serverSocket, TDES_Key, privatePemPath, publicPemPath), name='clientSendingThread')  
         clientReceiving = threading.Thread(target=UM.receivingThread, args=(serverSocket, TDES_Key, privatePemPath, publicPemPath), name='clientReceivingThread')
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
         clientSending.join()
         clientReceiving.join()
 
-        print('Í¨ĞÅÒÑ½áÊø...')
+        print('é€šä¿¡å·²ç»“æŸ...')
     else:
-        print("·şÎñÆ÷²»ºÏ·¨£¡ÒÑ¹Ø±ÕÁ¬½Ó")
-    print('»á»°½áÊø£¬ÒÑ¹Ø±ÕÁ¬½Ó')
+        print("æœåŠ¡å™¨ä¸åˆæ³•ï¼å·²å…³é—­è¿æ¥")
+    print('ä¼šè¯ç»“æŸï¼Œå·²å…³é—­è¿æ¥')
