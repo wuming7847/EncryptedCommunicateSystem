@@ -71,7 +71,6 @@ if __name__ == "__main__":
         UM.sendTo(serverSocket, DH_PublicAlice, "已向服务器发送客户端DH公钥")
         # 2.发送客户端DH公钥给服务器
 
-        # legalDH_PublicBob, RSA_DH_PublicBob = UM.RSA_VerifyFrom(serverSocket, publicPemPath)
         DH_PublicBob = UM.readFrom(serverSocket, '已接收到服务器DH公钥')
         # 3.接收服务器DH公钥
         print('服务器DH公钥', str(DH_PublicBob)[0:20])
